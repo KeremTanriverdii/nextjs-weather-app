@@ -1,7 +1,19 @@
+"use client"
 import { Droplet, Sunrise, Sunset } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
+import { useWeather } from "./WeatherContext";
 
 export default function WeatherHighlight() {
+    const { weather } = useWeather();
+
+    let localSunriseTime: any = null;
+    let localSunsetTime: any = null;
+    if (weather && weather?.sys.sunrise !== undefined && weather?.sys.sunset !== undefined) {
+        localSunriseTime = weather ? new Date((weather.sys.sunrise + weather.timezone) * 1000) : null;
+        localSunsetTime = weather ? new Date((weather.sys.sunset + weather.timezone) * 1000) : null;
+    }
+    console.log(weather)
+
     return (
         <div className="h-full w-full">
             <Card className="h-full flex flex-wrap w-full">
@@ -14,18 +26,17 @@ export default function WeatherHighlight() {
                             ehg
                         </CardContent>
                         <CardFooter className="flex  justify-between">
-                            <span> 7.90 km/h</span>
-                            <span>5:01 AM</span>
+                            <span> {weather?.wind.speed} km/h</span>
+                            <span>{weather?.timezone}</span>
                         </CardFooter>
                     </Card>
                     <Card className="md:w-1/3 w-full h-[270px]   md:h-[350px]">
                         <CardHeader>UV Index</CardHeader>
                         <CardContent>
-                            Chart 2
+
                         </CardContent>
                         <CardFooter className="flex justify-between">
-                            <span> 7.90 km/h</span>
-                            <span>5:01 AM</span>
+                            {weather?.main.uvi} UV
                         </CardFooter>
                     </Card>
                     <Card className="md:w-1/3 w-full h-[270px]  md:h-[350px]">
@@ -37,12 +48,14 @@ export default function WeatherHighlight() {
                             <div className="flex flex-col">
                                 <div><Sunrise /></div>
                                 <span>Sunrise</span>
-                                <span>5:50 AM</span>
+                                <span>{localSunriseTime?.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
+
                             </div>
                             <div className="flex flex-col">
                                 <div > <Sunset /></div>
                                 <span>Sunset</span>
-                                <span>6:30 PM</span>
+                                <span>{localSunsetTime?.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span>
+
                             </div>
                         </CardFooter>
                     </Card>
@@ -53,7 +66,7 @@ export default function WeatherHighlight() {
                     <Card className="md:w-1/3 w-full">
                         <CardHeader>Humidity</CardHeader>
                         <CardContent className="flex items-center justify-between">
-                            <p className="md:text-3xl">84 <span>%</span></p>
+                            <p className="md:text-3xl">{weather?.main.humidity} <span>%</span></p>
                             <div className="flex flex-col text-[12px]">
                                 <Droplet />
                                 <p>The dew point is 27© <br /> right now</p>
@@ -63,7 +76,8 @@ export default function WeatherHighlight() {
                     <Card className="md:w-1/3 w-full ">
                         <CardHeader>Visibility</CardHeader>
                         <CardContent className="flex items-center justify-between">
-                            <p className="md:text-3xl">03 <span>km</span></p>
+                            <p className="md:text-3xl">{(weather?.visibility ?? 0) / 1000} <span>km</span></p>
+
                             <div className="flex flex-col text-[12px]">
                                 <Droplet />
                                 <p>Haze is affecting<br /> visibility</p>
@@ -71,9 +85,9 @@ export default function WeatherHighlight() {
                         </CardContent>
                     </Card>
                     <Card className="md:w-1/3 w-full ">
-                        <CardHeader>Humidity</CardHeader>
+                        <CardHeader>Feels Like</CardHeader>
                         <CardContent className="flex items-center justify-between">
-                            <p className="md:text-3xl">42<span>°</span></p>
+                            <p className="md:text-3xl">{weather?.main.feels_like.toFixed(1)}<span>°</span></p>
                             <div className="flex flex-col text-[12px]">
                                 <Droplet />
                                 <p>Humidity is making<br /> it feel hotter.</p>

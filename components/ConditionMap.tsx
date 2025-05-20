@@ -1,8 +1,4 @@
-import dynamic from "next/dynamic";
 import SelectHours from "./SelectHours";
-import MapComponent from "./MapComponent";
-
-// const MapComponent = dynamic(() => import("./MapComponent"), { ssr: false })
 
 export default function ConditionMap() {
     return (
@@ -11,8 +7,8 @@ export default function ConditionMap() {
                 <h2>Weather Condition Map</h2>
                 <SelectHours />
             </div>
-            <div className="h-full mt-5">
-                <MapComponent />
+            <div className="h-full bg-emerald-800 mt-5">
+                This section goint to add map Condition
             </div>
         </div>
     )

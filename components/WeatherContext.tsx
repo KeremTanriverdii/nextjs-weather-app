@@ -3,7 +3,6 @@
 
 import { createContext, useContext, useState, ReactNode, useRef, useEffect, useCallback, useMemo } from 'react';
 import Papa from 'papaparse'
-
 export type GeoLocation = { name: string; lat: number; lon: number };
 
 export type WeatherData = {
@@ -32,8 +31,10 @@ type WeatherContextType = {
     forecast: any
 };
 
-type ForecastData = {
+export type ForecastItem = {
     dt: string;
+    dt_txt: string;
+    city: { name: string; }
     list: {
         dt_txt: string;
         main: { temp_max: number; temp_min: number; }
@@ -47,7 +48,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
     const [location, _setLocation] = useState<GeoLocation | null>(null);
     const [weather, setWeather] = useState<WeatherData | null>(null);
     const [query, setQuery] = useState<string | any>('');
-    const [forecast, setForecast] = useState<ForecastData | any>(null)
+    const [forecast, setForecast] = useState<ForecastItem | any>(null)
     const [suggestions, setSuggestions] = useState<GeoLocation[]>([]);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const allCitiesRef = useRef<GeoLocation[]>([]);
@@ -79,11 +80,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
 
     }, [performSearch])
 
-    const handleSelectSuggestion = useCallback((suggestion: GeoLocation) => {
-        setQuery(suggestion.name);
-        _setLocation(suggestion);
-        setSuggestions([])
-    }, [])
+
 
     const initLocation = useCallback(() => {
         const defaultLocation = { name: 'Istanbul', lat: 41.0082, lon: 28.9784 };
@@ -105,6 +102,13 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         setWeather(weatherData);
         setForecast(foreCastData);
     }, []);
+
+    const handleSelectSuggestion = useCallback((suggestion: GeoLocation) => {
+        setQuery(suggestion.name);
+        _setLocation(suggestion);
+        setSuggestions([])
+        fetchWeatherData(suggestion)
+    }, [fetchWeatherData])
 
     useEffect(() => {
         const loadCities = async () => {

@@ -4,7 +4,7 @@ import Map, { Marker, NavigationControl, ViewState } from 'react-map-gl/mapbox';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useEffect, useRef, useState } from 'react';
 import { useWeather } from './WeatherContext';
-import type { MapRef } from 'react-map-gl/mapbox';
+import type { MapRef } from 'react-map-gl/mapbox-legacy';
 const MapComponent = () => {
 
     const { location } = useWeather();

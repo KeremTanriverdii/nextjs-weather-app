@@ -12,7 +12,6 @@ export default function WeatherHighlight() {
         localSunriseTime = weather ? new Date((weather.sys.sunrise + weather.timezone) * 1000) : null;
         localSunsetTime = weather ? new Date((weather.sys.sunset + weather.timezone) * 1000) : null;
     }
-    console.log(weather)
 
     return (
         <div className="h-full w-full">

@@ -7,10 +7,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/t
 
 export default function WeatherCard() {
     const { weather } = useWeather();
-    console.log(weather)
-    const utcSecondsdt = (weather?.dt ?? 0) + (weather?.timezone ?? 0)
-    let localDatedt: Date | null = null;
 
+    let localDatedt: Date | null = null;
     if (weather && weather.dt !== undefined && weather.timezone !== undefined) {
         localDatedt = new Date((weather.dt + weather.timezone) * 1000);
     }

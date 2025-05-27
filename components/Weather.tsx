@@ -1,18 +1,17 @@
 "use client"
-import { Calendar, LocateIcon, MapPin, Search } from "lucide-react";
+import { Calendar, MapPin } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import { useWeather, WeatherData } from "./WeatherContext";
+import { useWeather, WeatherData } from "../app/context/WeatherContext";
 import SearchBar from "./SearchInput";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 export default function WeatherCard() {
-    const { weather } = useWeather();
-
-    let localDatedt: Date | null = null;
-    if (weather && weather.dt !== undefined && weather.timezone !== undefined) {
-        localDatedt = new Date((weather.dt + weather.timezone) * 1000);
+    // Get the weather data from the context
+    const { weather, localDate } = useWeather();
+    // If weather or localDate is not avaible, return a loading state
+    if (!weather && !localDate) {
+        return <div>Loading</div>
     }
-
     return (
         <div className="h-full">
             <Card className="relative h-full ">
@@ -63,10 +62,11 @@ export default function WeatherCard() {
                         </span>
                     </div>
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 text-[12px] sm-[text-14px] md:text-[16px] items-center">
                         <Calendar color="#dfc207" />
-
-                        {localDatedt?.toDateString()} - {localDatedt?.toLocaleDateString('tr-TR', { hour: '2-digit' })}
+                        <span className="text-[14px]">
+                            {localDate[0]}
+                        </span>
                     </div>
                 </CardFooter>
             </Card>

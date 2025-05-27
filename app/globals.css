@@ -136,6 +136,16 @@
   }
 }
 
+@layer components {
+  .recharts-legend-item-text {
+    @apply text-white
+  }
+
+  tspan {
+    @apply fill-white
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -1,5 +1,5 @@
 
-import { LabelList, PolarGrid, RadialBar, RadialBarChart } from "recharts"
+import { LabelList, RadialBar, RadialBarChart } from "recharts"
 
 import {
     Card,
@@ -65,14 +65,12 @@ export default function GeneralCharts({ chartProps, time }: GeneralProps) {
     return (
 
         <Card
-            className="w-full h-full
-            bg-linear-to-r/increasing from-[#192F33] to-[#135065]
-         rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-50">
+            className="bg-card-style h-full w-full"
+        >
             <CardHeader
-                className="items-center text-white">
-                <CardTitle>Weather's Chart </CardTitle>
-                <CardDescription
-                    className="text-white"
+                className="items-center text-2xl">
+                <CardTitle className="text-sm md:text-2xl">Weather's Chart </CardTitle>
+                <CardDescription className="text-white font-bold"
                 >
                     {time[0]}
                 </CardDescription>
@@ -102,12 +100,11 @@ export default function GeneralCharts({ chartProps, time }: GeneralProps) {
                         <LabelList
                             position="insideStart"
                             dataKey="browser"
-                            className="fill-white capitalize mix-blend-luminosity"
+                            className="fill-black capitalize mix-blend-luminosity"
                             fontSize={11}
                         />
                     </RadialBar>
                     {/* Grid system for chart */}
-                    <PolarGrid gridType="circle" />
                 </RadialBarChart>
             </ChartContainer>
 

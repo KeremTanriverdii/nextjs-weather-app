@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search } from "lucide-react";
+import { Calendar, Home, Inbox, Moon, Search } from "lucide-react";
 import { type SVGProps } from "react";
 
 interface SidebarItemsType {
@@ -8,10 +8,7 @@ interface SidebarItemsType {
 }
 
 const sidebarItems: SidebarItemsType[] = [
-    { id: 0, itemLabel: "İtems1", icon: Home },
-    { id: 1, itemLabel: "İtems1", icon: Calendar },
-    { id: 2, itemLabel: "İtems1", icon: Inbox },
-    { id: 3, itemLabel: "İtems1", icon: Search },
+    { id: 0, itemLabel: "Home", icon: Home },
 ]
 
 export { sidebarItems }

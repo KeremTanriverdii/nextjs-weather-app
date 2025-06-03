@@ -1,12 +1,12 @@
-import ConditionMap from "@/components/ConditionMap";
 import Forecast from "@/components/Forecast";
 import WeatherCard from "@/components/Weather";
-import { WeatherProvider } from "@/components/WeatherContext";
+import { WeatherProvider } from "@/app/context/WeatherContext";
 import WeatherHighlight from "@/components/WeatherHighlight";
+import MapComponent from "@/components/MapComponent";
 
 export default function Home() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 md:gap-10 px-5 h-[40vh] mt-10">
+    <div className="grid grid-cols-1 md:grid-cols-3 content-center gap-5 md:gap-3 px-1 mt-10">
       <WeatherProvider>
         <WeatherCard />
         <div className="md:col-span-2">
@@ -14,7 +14,7 @@ export default function Home() {
         </div>
         <Forecast />
         <div className="md:col-span-2">
-          <ConditionMap />
+          <MapComponent />
         </div>
       </WeatherProvider>
     </div>

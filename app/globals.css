@@ -112,8 +112,6 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-
-
 @layer utilities {
   flex-center {
     @apply flex items-center justify-center
@@ -141,9 +139,19 @@
     @apply text-white
   }
 
+  .bg-card-style {
+    @apply bg-white/5 rounded-md bg-clip-padding backdrop-filter backdrop-blur-none opacity-80 border border-gray-100
+  }
+
   tspan {
     @apply fill-white
   }
+
+  .bg-animated {
+    @apply text-white
+  }
+
+
 }
 
 @layer base {
@@ -155,3 +163,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes slide {
+  0% {
+    transform: translateX(-25%);
+  }
+
+  100% {
+    transform: translateX(25%);
+  }
+}
+
+.legend-item-1 {
+  -webkit-text-fill-color: white;
+}
+
+.legend-item-1 span {}

@@ -11,11 +11,11 @@ import { useWeather } from "@/app/context/WeatherContext"
 const chartConfig = {
     windSpeed: {
         label: "Wind Speed (m/s)",
-        color: "#fff"
+        color: "hsl(var(--chart-1))"
     },
     gust: {
         label: "Gust (m/s)",
-        color: "#F59E0B"
+        color: "hsl(var(--chart-2))"
     },
 } satisfies ChartConfig
 
@@ -23,7 +23,8 @@ const chartConfig = {
 export function WindSpeedChart() {
     const { forecast } = useWeather();
     const [chartWindData, setChartWindData] = useState([]);
-    console.log(forecast)
+
+
     useEffect(() => {
         if (forecast && forecast.list) {
             const processData = forecast.list.slice(0, 8).map((item: any) => ({
@@ -35,25 +36,26 @@ export function WindSpeedChart() {
         } else {
             setChartWindData([])
         }
-    }, [forecast])
+    }, [forecast]);
+
 
     return (
-        <Card className="w-full h-full bg-linear-to-r/increasing  from-[#192F33] to-[#142428]  rounded-md bg-clip-padding backdrop-filter backdrop-blur-none bg-opacity-50">
+        <Card className="w-full h-full  bg-card-style ">
             <CardHeader
-                className="flex flex-row items-center justify-between text-white
-            ">
+                className="flex flex-row items-center justify-between"
+            >
                 <div>
-                    <CardTitle>Wind Speed Analysis</CardTitle>
-                    <CardDescription
-                        className="text-white"
+                    <CardTitle className="md:text-2xl">Wind Speed Analysis</CardTitle>
+                    <CardDescription className="text-[13px] md:text-md mt-3 text-white font-bold"
                     >
                         Wind speed and gust measurements over time
                     </CardDescription>
                 </div>
             </CardHeader>
-            <CardContent className="">
+            <CardContent>
                 <ChartContainer
                     config={chartConfig}
+                    className="aspect-square"
 
                 >
                     <ResponsiveContainer
@@ -71,10 +73,9 @@ export function WindSpeedChart() {
 
                             <XAxis
                                 dataKey="time"
-                                tickLine={false}
+                                tickLine={true}
                                 axisLine={false}
-                                tickMargin={5}
-
+                                className="fill-white"
                             />
                             <YAxis
                                 tickLine={false}
@@ -84,7 +85,7 @@ export function WindSpeedChart() {
                                     value: "Wind Speed (m/s)",
                                     angle: -90,
                                     position: "insideLeft",
-                                    style: { textAnchor: "middle", fill: "#fff", fontSize: 11 },
+                                    style: { textAnchor: "middle", fontSize: 11, },
                                 }}
                             />
                             <Tooltip content={<ChartTooltipContent />} />
@@ -94,6 +95,8 @@ export function WindSpeedChart() {
                                 radius={[4, 4, 0, 0]}
                                 barSize={15}
                                 name={chartConfig.windSpeed.label}
+                                fill="#000"
+
                             />
                             <Line
                                 type="monotone"

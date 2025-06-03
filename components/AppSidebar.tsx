@@ -1,5 +1,3 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
 import {
     Sidebar,
     SidebarContent,
@@ -13,48 +11,15 @@ import {
 } from "@/components/ui/sidebar"
 import { sidebarItems } from "@/app/data"
 
-// Menu items.
-const items = [
-    {
-        title: "Home",
-        url: "#",
-        icon: Home,
-    },
-    {
-        title: "Inbox",
-        url: "#",
-        icon: Inbox,
-    },
-    {
-        title: "Calendar",
-        url: "#",
-        icon: Calendar,
-    },
-    {
-        title: "Search",
-        url: "#",
-        icon: Search,
-    },
-    {
-        title: "Settings",
-        url: "#",
-        icon: Settings,
-    },
-]
-
 export function AppSidebar() {
     return (
-        <Sidebar>
+        <Sidebar className="h-11/12 my-auto border-0">
             <SidebarContent
-                style={{
-                    "margin": "0 15px",
-                    "borderRadius": "15px"
-
-                }}>
-                <SidebarGroup>
+            >
+                <SidebarGroup className="items-center">
                     <SidebarGroupLabel>Weather</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
+                    <SidebarGroupContent className="items-center">
+                        <SidebarMenu className="items-center">
                             {sidebarItems.map((item) => (
                                 <SidebarMenuItem key={item.id}>
                                     <SidebarMenuButton asChild>
@@ -68,8 +33,7 @@ export function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-                <SidebarFooter className="h-full ">
-                    Naber
+                <SidebarFooter>
                 </SidebarFooter>
             </SidebarContent>
         </Sidebar>

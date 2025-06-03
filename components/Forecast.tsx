@@ -2,12 +2,11 @@
 import { useState } from "react";
 import SelectMenu from "./SelectMenu";
 import { Card, CardContent } from "./ui/card";
-import { ForecastItem, useWeather } from "./WeatherContext";
+import { ForecastItem, useWeather } from "../app/context/WeatherContext";
 
 export default function Forecast() {
     const { forecast } = useWeather();
     const [selectedForecastType, setSelectedForecastType] = useState('daily');
-    console.log(forecast)
     if (!forecast || !forecast.list) {
         return <div>Forecast is loading</div>
     }
@@ -50,24 +49,22 @@ export default function Forecast() {
         const date = new Date(dateString);
         return date.toLocaleString('en-US', { month: 'long', day: 'numeric' })
     }
-    console.log(forecastToShow)
     return (
-        <div className="h-full w-full">
-            <div className="flex-between mb-5">
-                <h2>{forecast.city.name} Forecast</h2>
-                <SelectMenu selected={selectedForecastType} onChange={setSelectedForecastType} />
-            </div>
-            <Card className="h-full">
-                <CardContent className="flex-col-start gap-3">
+        <div className="h-full w-full bg-style-card mb-3">
+            <Card className="h-full bg-transparent">
+                <div className="flex-between px-3 mb-5">
+                    <h2 className="text-2xl">{forecast.city.name} Forecast</h2>
+                    <SelectMenu selected={selectedForecastType} onChange={setSelectedForecastType} />
+                </div>
+                <CardContent className="flex-col-start p-0 md:gap-3 ">
                     {/* This blow is must be add map func to content */}
-
                     {forecastToShow.map((item: any, index: number) => (
-                        <div className="flex-between" key={index}>
-                            <div className="flex p-3">
+                        <div className="flex items-center justify-between" key={index}>
+                            <div className="flex p-1">
                                 <img src={`http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`} alt="" width={30} height={30} />
                                 <span>{item.main.temp_max.toFixed(0)}/ <span className="text-gray-600 text-[14px]">{item.main.temp_min.toFixed(0)}</span> </span>
                             </div>
-                            <span>
+                            <span className="text-sm md:text-md">
                                 {selectedForecastType === 'hour'
                                     ? new Date(item.dt_txt).toLocaleTimeString('en-US', {
                                         hour: '2-digit',
@@ -75,7 +72,7 @@ export default function Forecast() {
                                     : getDate(item.dt_txt)
                                 }
                             </span>
-                            <span className="text-end w-1/5">{getDayName(item.dt_txt)}</span>
+                            <span className="text-end w-1/5 text-[14px] md:text-md me-4">{getDayName(item.dt_txt)}</span>
                         </div>
                     ))}
 

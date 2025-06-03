@@ -18,8 +18,9 @@ export type WeatherData = {
     dt: number;
     clouds: { all: number }
     timezone_offset: number
-
-
+    coord: { lat: number, lot: number }
+    cod: number;
+    message?: string;
 };
 
 // Define the structure of the forecast data
@@ -27,13 +28,15 @@ type WeatherContextType = {
     location: GeoLocation | null;
     weather: WeatherData | null;
     setLocation: (loc: GeoLocation) => void;
-    fetchWeatherData: (loc: GeoLocation) => void;
+    fetchWeatherData: (loc: GeoLocation) => Promise<void>;
     query: string;
     suggestions: GeoLocation[];
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSelectSuggestion: (loc: GeoLocation) => void;
     forecast: any,
-    localDate: string[]
+    localDate: string[];
+    handleBlur: any;
+
 };
 
 export type ForecastItem = {
@@ -85,7 +88,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         const filteredCities = allCitiesRef.current.filter(city =>
             city.name.toLowerCase().includes(lowerQuery)
         )
-        setSuggestions(filteredCities.slice(0, 10))
+        setSuggestions(filteredCities.slice(0, 5))
     }, [])
 
     // Handle input change and perform searh with a debounce
@@ -125,12 +128,15 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
 
             setWeather(weatherData);
             setForecast(foreCastData);
+
+
         } catch (err) {
             console.log("get data error during", err);
             setWeather(null);
             setForecast(null);
         }
     }, []);
+
 
     const handleSelectSuggestion = useCallback((suggestion: GeoLocation) => {
         setQuery(suggestion.name);
@@ -139,6 +145,11 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         fetchWeatherData(suggestion)
     }, [fetchWeatherData])
 
+    const handleBlur = () => {
+        setTimeout(() => {
+            setSuggestions([])
+        }, 100);
+    }
 
     // CSV files upload and parse
     useEffect(() => {
@@ -228,8 +239,10 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         handleSelectSuggestion,
         fetchWeatherData,
         forecast,
-        localDate
-    }), [location, weather, localDate, forecast, query, suggestions, handleInputChange, handleSelectSuggestion, fetchWeatherData]
+        localDate,
+        handleBlur,
+    }), [location, weather, handleBlur,
+        localDate, forecast, query, suggestions, handleInputChange, handleSelectSuggestion, fetchWeatherData]
     )
 
     return (

@@ -1,22 +1,11 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react'; // useEffect ve useCallback eklendi
-import { GeoLocation, useWeather } from './WeatherContext';
-import { Search } from 'lucide-react';
-import Papa from 'papaparse'
-// GeoLocation tipinin lat, lon ve name alanlarını içerdiğini varsayıyoruz.
-// WeatherContext dosyanızdaki tanımıyla eşleşmeli.
-// interface GeoLocation {
-//     lat: number;
-//     lon: number;
-//     name: string;
-// }
-
-const fileCitiesPath = "/cities_all.csv"; // public klasörüne taşındı
-
+import { useWeather } from '../app/context/WeatherContext';
+import { SearchIcon } from 'lucide-react';
+import React, { KeyboardEvent } from 'react';
 export default function SearchBar() {
-
-    const { query, suggestions, handleInputChange, handleSelectSuggestion } = useWeather();
+    // Get the WeatherContext states
+    const { query, suggestions, handleInputChange, handleSelectSuggestion, handleBlur } = useWeather();
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && suggestions.length > 0) {
@@ -25,24 +14,32 @@ export default function SearchBar() {
     };
 
     return (
-        <div>
+        <div className='relative w-full'>
             <input
                 type='text'
                 value={query}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-                placeholder="Şehir ara..." />
+                onBlur={handleBlur}
+                placeholder={`Search City`}
+                className='border border-gray-400 rounded-md  p-3 w-full'
+            />
+            <div className='absolute inset-y-3 right-0 pr-3 pointer-events-none'>
+                <SearchIcon />
+            </div>
             {suggestions.length > 0 && (
-                <ul className='flex flex-col gap-2 bg-white'>
-                    {suggestions.map((city, index) => (
-                        <li key={index}
-                            onClick={() => handleSelectSuggestion(city)}
-                            className='z-10 gap-2 hover:bg-slate-500 p-2'
-                        >
-                            {city.name}
-                        </li>
-                    ))}
-                </ul>
+                <div className='absolute z-30 w-full mt-1 max-h-[200px]'>
+                    <ul className='flex flex-col gap-2 bg-slate-400/10'>
+                        {suggestions.map((city, index) => (
+                            <li key={index}
+                                onClick={() => handleSelectSuggestion(city)}
+                                className='gap-2 hover:bg-slate-500 p-2 rounded-md'
+                            >
+                                {city.name}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )}
         </div>
     );

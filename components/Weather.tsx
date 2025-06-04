@@ -25,9 +25,10 @@ export default function WeatherCard() {
                             <TooltipTrigger asChild>
                                 <img
                                     src={`https://openweathermap.org/img/wn/${weather?.weather[0].icon}@4x.png`}
-                                    alt={weather?.weather[0].description}
+                                    alt={'Description'}
                                     width={500}
-                                    className="sm:w-1/2"
+                                    height={500}
+                                    className="sm:w-1/2 sm:h-1/2 md:h-full"
                                 />
                             </TooltipTrigger>
                             <TooltipContent>

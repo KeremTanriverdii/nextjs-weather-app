@@ -19,7 +19,6 @@ const MapComponent = () => {
         pitch: 0,
         padding: { top: 0, bottom: 0, left: 0, right: 0 }
     });
-    const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/outdoors-v10');
     // If select a city automically go position on map
     useEffect(() => {
         if (location && mapRef.current) {
@@ -34,13 +33,13 @@ const MapComponent = () => {
 
 
     return (
-        <div className="w-full h-[30vh] md:h-full  rounded-xl overflow-hidden shadow-lg">
+        <div className="w-full h-full  rounded-xl overflow-hidden shadow-lg">
             <Map
                 ref={mapRef}
                 {...viewState}
                 onMove={evt => setViewState(evt.viewState)}
                 mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-                mapStyle={mapStyle}
+                mapStyle={'mapbox://styles/mapbox/outdoors-v10'}
             >
                 <NavigationControl position="bottom-right" style={{ display: 'flex', flexDirection: "column", gap: '5px' }} />
 

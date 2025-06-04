@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Moon, Search } from "lucide-react";
+import { Home } from "lucide-react";
 import { type SVGProps } from "react";
 
 interface SidebarItemsType {

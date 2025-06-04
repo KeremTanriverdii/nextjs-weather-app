@@ -33,46 +33,77 @@ type WeatherContextType = {
     suggestions: GeoLocation[];
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSelectSuggestion: (loc: GeoLocation) => void;
-    forecast: any,
+    forecast: Forecast | null,
     localDate: string[];
-    handleBlur: any;
-
+    handleBlur: () => void;
 };
 
-export type ForecastItem = {
+export interface Forecast {
+    cod: string;
+    message: number;
+    cnt: number;
+    list: WeatherForecastItem[];
     city: {
+        id: number;
         name: string;
-        country: string;
-        coord: { lat: number; lon: number };
-    };
-    dt: number;
-    dt_txt: string;
-
-    list: {
-        main: {
-            temp: number;
-            temp_min: number;
-            temp_max: number;
-            wind: { speed: number; gust: number; }
+        coord: {
+            lat: number;
+            lon: number;
         };
-        weather: { main: string; description: string; icon: string }[];
-    }[];
+        country: string;
+        population: number;
+        timezone: number;
+        sunrise: number;
+        sunset: number;
+    };
 }
 
-type localDate = {
-    localDate: Date | null;
-    localSunriseTime: Date | null;
-    localSunsetTime: Date | null;
-    setLocalDate: (date: Date | null) => void;
+export interface WeatherForecastItem {
+    dt: number;
+    dt_txt: string;
+    main: {
+        temp: number;
+        feels_like: number;
+        temp_min: number;
+        temp_max: number;
+        pressure: number;
+        humidity: number;
+        sea_level: number;
+        grnd_level: number;
+    };
+    weather: {
+        id: number;
+        main: string;
+        description: string;
+        icon: string;
+    }[];
+    clouds: {
+        all: number;
+    };
+    wind: {
+        speed: number;
+        deg: number;
+        gust?: number; // gust might be optional
+    };
+    visibility: number;
+    pop: number;
+    sys: {
+        pod: string;
+    };
+}
+type CityParseType = {
+    city_name?: string;
+    lat?: number;
+    lon?: number;
 }
 // Create the WeatherContext with a default value of undefined
 const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 
 export const WeatherProvider = ({ children }: { children: ReactNode }) => {
-    const [location, _setLocation] = useState<GeoLocation | null>(null);
+    const [location, setLocationOnly] = useState<GeoLocation | null>(null);
     const [weather, setWeather] = useState<WeatherData | null>(null);
-    const [query, setQuery] = useState<string | any>('');
-    const [forecast, setForecast] = useState<ForecastItem | null>(null)
+    const [query, setQuery] = useState<string>('');
+    const [forecast, setForecast] = useState<Forecast | null>(null)
     const [suggestions, setSuggestions] = useState<GeoLocation[]>([]);
     const [localDate, setLocalDate] = useState<string[]>([])
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -117,8 +148,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
     // Fetch weather data for the given Location
     const fetchWeatherData = useCallback(async (loc: GeoLocation) => {
         try {
-            _setLocation(loc);
-
+            setLocationOnly(loc);
             const [weathersRes, forecastRes] = await Promise.all([
                 fetch(`https://api.openweathermap.org/data/2.5/weather?q=${loc.name}&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API}&units=metric`),
                 fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${loc.lat}&lon=${loc.lon}&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API}&units=metric`)
@@ -137,20 +167,20 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-
+    // Select city and add city fetch req
     const handleSelectSuggestion = useCallback((suggestion: GeoLocation) => {
         setQuery(suggestion.name);
-        _setLocation(suggestion);
-        setSuggestions([])
         fetchWeatherData(suggestion)
+        setSuggestions([]);
     }, [fetchWeatherData])
 
+    // If mouse click outside on input clear options (suggestions)
     const handleBlur = () => {
         setTimeout(() => {
-            setSuggestions([])
-        }, 100);
+            if (!document.activeElement?.closest('suggestion-dropdown'))
+                setSuggestions([])
+        }, 200);
     }
-
     // CSV files upload and parse
     useEffect(() => {
         const loadCities = async () => {
@@ -159,12 +189,12 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
                 if (!response.ok) throw new Error(`CSV yüklenemedi: ${response.status}`);
 
                 const csvText = await response.text();
-                Papa.parse(csvText, {
+                Papa.parse<CityParseType>(csvText, {
                     header: true,
                     dynamicTyping: true,
                     complete: (results) => {
                         const parsedCities: GeoLocation[] = results.data
-                            .map((row: any) => {
+                            .map((row) => {
                                 if (row.city_name && typeof row.lat === 'number' && typeof row.lon === 'number') {
                                     return {
                                         name: row.city_name,
@@ -174,12 +204,11 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
                                 }
                                 return null;
                             })
-                            .filter(Boolean) as GeoLocation[];
-
+                            .filter((city): city is GeoLocation => city !== null);
                         allCitiesRef.current = parsedCities;
                     },
-                    error: (err: any) => {
-                        console.error("CSV parse hatası:", err);
+                    error: () => {
+                        console.error("CSV parse hatası:",);
                     }
                 });
 
@@ -194,7 +223,6 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         initLocation()
     }, [initLocation]);
-
     // Set the local date based on the weather data
     useEffect(() => {
 
@@ -239,10 +267,10 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
         handleSelectSuggestion,
         fetchWeatherData,
         forecast,
-        localDate,
         handleBlur,
-    }), [location, weather, handleBlur,
-        localDate, forecast, query, suggestions, handleInputChange, handleSelectSuggestion, fetchWeatherData]
+        localDate,
+
+    }), [location, weather, localDate, forecast, query, suggestions, handleInputChange, handleSelectSuggestion, fetchWeatherData]
     )
 
     return (

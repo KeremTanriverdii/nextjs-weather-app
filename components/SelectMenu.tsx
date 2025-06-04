@@ -12,7 +12,7 @@ export default function SelectMenu({ selected, onChange }: Props) {
                 <SelectValue placeholder="7 day" />
             </SelectTrigger>
             <SelectContent >
-                <SelectItem value="hour">Hour</SelectItem>
+                <SelectItem value="hourly">Hourly</SelectItem>
                 <SelectItem value="daily">Daily</SelectItem>
             </SelectContent>
         </Select>

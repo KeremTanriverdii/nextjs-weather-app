@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { useWeather } from "../app/context/WeatherContext";
 import { WindSpeedChart } from "./Charts";
 import GeneralCharts from "./GeneralCharts";
-import CardWeather from "./CardWeather";
+import { CardWeather } from "./CardWeather";
 
 export default function WeatherHighlight() {
     // Get the weather data and local date(string format) from the context
@@ -20,14 +20,14 @@ export default function WeatherHighlight() {
 
     return (
         <Card className="w-full md:flex flex-wrap bg-card-style h-full">
-            <CardHeader className="md:text-3xl font-bold">Today's Highlight</CardHeader>
+            <CardHeader className="md:text-3xl font-bold">Today&apos; Highlight</CardHeader>
 
             <CardContent className="flex flex-col md:flex-row w-full justify-stretch gap-5">
-                <div className="md:w-1/2">
+                <div className="md:w-1/2 h-[40vh]">
                     <WindSpeedChart />
                 </div>
 
-                <div className="md:w-1/2">
+                <div className="md:w-1/2 h-[40vh]">
                     <GeneralCharts chartProps={weatherData} time={localDate} />
                 </div>
             </CardContent>

@@ -1,8 +1,14 @@
 import { Droplet, Eye, Thermometer } from "lucide-react";
 import { Card, CardContent, CardHeader } from "./ui/card";
+import React from "react";
 
 
-export default function CardWeather({ data, title }: any) {
+interface Props {
+    data: number;
+    title: string;
+}
+
+export const CardWeather: React.FC<Props> = ({ data, title }) => {
     return (
         <Card className="w-full bg-card-style text-white lg:h-full">
             <CardHeader>{title}</CardHeader>

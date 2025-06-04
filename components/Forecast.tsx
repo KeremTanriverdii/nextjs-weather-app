@@ -2,7 +2,8 @@
 import { useState } from "react";
 import SelectMenu from "./SelectMenu";
 import { Card, CardContent } from "./ui/card";
-import { ForecastItem, useWeather } from "../app/context/WeatherContext";
+import { useWeather, WeatherForecastItem } from "../app/context/WeatherContext";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 export default function Forecast() {
     const { forecast } = useWeather();
@@ -12,13 +13,12 @@ export default function Forecast() {
     }
 
 
-    function getHourlyForecast(list: ForecastItem[]): ForecastItem[] {
+    function getHourlyForecast(list: WeatherForecastItem[]): WeatherForecastItem[] {
         return list.slice(0, 8)
     }
 
-    function getDailyForecast(list: ForecastItem[]): ForecastItem[] {
-        const grouped: Record<string, ForecastItem[]> = {};
-
+    function getDailyForecast(list: WeatherForecastItem[]): WeatherForecastItem[] {
+        const grouped: Record<string, WeatherForecastItem[]> = {};
         list.forEach(item => {
             const date = item.dt_txt.split(" ")[0];
             if (!grouped[date]) grouped[date] = [];
@@ -38,7 +38,7 @@ export default function Forecast() {
     const hourlyForecastContent = getHourlyForecast(forecast.list);
     const dailyForecastContent = getDailyForecast(forecast.list)
 
-    const forecastToShow = selectedForecastType === 'hour' ? hourlyForecastContent : dailyForecastContent
+    const forecastToShow = selectedForecastType === 'hourly' ? hourlyForecastContent : dailyForecastContent
 
     const getDayName = (dateString: string) => {
         const date = new Date(dateString);
@@ -58,12 +58,19 @@ export default function Forecast() {
                 </div>
                 <CardContent className="flex-col-start p-0 md:gap-3 ">
                     {/* This blow is must be add map func to content */}
-                    {forecastToShow.map((item: any, index: number) => (
+                    {forecastToShow.map((item: WeatherForecastItem, index: number) => (
                         <div className="flex items-center justify-between" key={index}>
-                            <div className="flex p-1">
-                                <img src={`http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`} alt="" width={30} height={30} />
-                                <span>{item.main.temp_max.toFixed(0)}/ <span className="text-gray-600 text-[14px]">{item.main.temp_min.toFixed(0)}</span> </span>
-                            </div>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <img src={`http://openweathermap.org/img/wn/${item.weather[0].icon}@4x.png`} alt="" width={80} height={30} />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        {item.weather[0].description}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                            <span>{item.main.temp_max.toFixed(0)}/ <span className="text-gray-600 text-[14px]">{item.main.temp_min.toFixed(0)}</span> </span>
                             <span className="text-sm md:text-md">
                                 {selectedForecastType === 'hour'
                                     ? new Date(item.dt_txt).toLocaleTimeString('en-US', {

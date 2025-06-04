@@ -68,8 +68,8 @@ export default function GeneralCharts({ chartProps, time }: GeneralProps) {
             className="bg-card-style h-full w-full"
         >
             <CardHeader
-                className="items-center text-2xl">
-                <CardTitle className="text-sm md:text-2xl">Weather's Chart </CardTitle>
+                className="flex flex-col  text-2xl">
+                <CardTitle className="text-sm md:text-2xl">Weather&apos; Chart </CardTitle>
                 <CardDescription className="text-white font-bold"
                 >
                     {time[0]}
@@ -80,7 +80,7 @@ export default function GeneralCharts({ chartProps, time }: GeneralProps) {
             {/* Chart provided by Shadcn */}
             <ChartContainer
                 config={chartConfig}
-                className="w-full mx-auto aspect-square"
+                className="w-full my-auto"
             >
                 <RadialBarChart
                     data={chartData}

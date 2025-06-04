@@ -33,7 +33,7 @@ export default function SearchBar() {
                         {suggestions.map((city, index) => (
                             <li key={index}
                                 onClick={() => handleSelectSuggestion(city)}
-                                className='gap-2 hover:bg-slate-500 p-2 rounded-md'
+                                className='gap-2 hover:bg-slate-500 p-2 rounded-md suggestion-dropdown'
                             >
                                 {city.name}
                             </li>

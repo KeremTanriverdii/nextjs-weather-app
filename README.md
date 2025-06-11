@@ -2,7 +2,8 @@ This weather app project development by Next.js, and use to technologies: Tailwi
 You can access my project on vercel.
 
 ![image](https://github.com/user-attachments/assets/2df04247-f6b3-490c-a24b-57a70558576f)
-https://img.shields.io/badge/Demo-live?style=flat-square&label=Live&labelColor=FFC0CB&color=FFC0CB&link=https%3A%2F%2Fvercel.com%2Fkeremtanriverdiis-projects%2Fnextjs-weather-app
+![Static Badge](https://img.shields.io/badge/Demo-live?style=flat-square&label=Live&labelColor=FFC0CB&color=FFC0CB&link=https%3A%2F%2Fvercel.com%2Fkeremtanriverdiis-projects%2Fnextjs-weather-app)
+
 
 
 
